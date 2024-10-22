@@ -23,7 +23,7 @@
 
     - name: Copy war File to tomcat webapps directory
       copy:
-        src: "/home/abc{{ war_file }}"
+        src: "/home/abc/{{ war_file }}"
         dest: "{{ war_deploy_dir }}"
         mode: '0644'
         owner: "{{ tomcat_user }}"
