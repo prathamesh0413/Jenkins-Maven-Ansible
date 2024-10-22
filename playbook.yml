@@ -6,7 +6,7 @@
     tomcat_user: tomcat
     tomcat_group: tomcat
     war_file: my-webapp.war
-    war_deploy_dir: /usr/share/tomcat/webapps
+    war_deploy_dir: /usr/share/tomcat9/webapps
 
   tasks:
     - name: Install Tomcat9 and Java
@@ -23,7 +23,7 @@
 
     - name: Copy war File to tomcat webapps directory
       copy:
-        src: "files/{{ war_file }}"
+        src: "/home/abc{{ war_file }}"
         dest: "{{ war_deploy_dir }}"
         mode: '0644'
         owner: "{{ tomcat_user }}"
