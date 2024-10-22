@@ -1,0 +1,40 @@
+---
+- name: Setup Apache Tomcat and Deploy war files
+  hosts: all
+  become: yes
+  vars:
+    tomcat_user: tomcat
+    tomcat_group: tomcat
+    war_file: my-webapp.war
+    war_deploy_dir: /usr/share/tomcat/webapps
+
+  tasks:
+    - name: Install Tomcat9 and Java
+      yum:
+        name:
+          - java-17-amazon-corretto-devel
+          - tomcat9
+          - tomcat9-webapps
+          - tomcat9-admin-webapps
+        state: present
+
+    - name: Ensure tomcat is enabled and started
+      service: name=tomcat9 state=started enabled=yes
+
+    - name: Copy war File to tomcat webapps directory
+      copy:
+        src: "files/{{ war_file }}"
+        dest: "{{ war_deploy_dir }}"
+        mode: '0644'
+        owner: "{{ tomcat_user }}"
+        group: "{{ tomcat_group }}"
+
+    - name: Restart tomcat to Deploy war files
+      service: name=tomcat9 state=restarted
+
+    - name: Ensure tomcat is running
+      systemd:
+        name: tomcat9
+        state: started
+
+
